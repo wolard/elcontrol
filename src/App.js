@@ -1,28 +1,37 @@
-import logo from './logo.svg';
+import React, {useState, useEffect} from 'react';
 import './App.css';
-fetch('http://localhost:3000/init')
-.then(response => response.json())
-.then(data => console.log(data));
+
+import Buttons from './components/Buttons'
+
 
 function App() {
- 
+  const handleButtonClick = (card,relay,type) => {
+    console.log(card);
+    console.log(relay);
+    console.log(type);
+  }
+
+  const [btns, setButtons] = useState("");
+  useEffect(() => {
+    const url = "http://localhost:3000/init";
+
+    const fetchData = async () => {
+      try {
+        const response = await fetch(url);
+        const json = await response.json();
+        console.log(json);
+     //   const conf=JSON.parse(json);
+        setButtons(json)
+      } catch (error) {
+        console.log("error", error);
+      }
+    };
+
+    fetchData();
+}, []);
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+      <Buttons btns={btns.config} handleButtonClick={handleButtonClick} />
+   //  <h1>helle</h1>
   );
 }
 
