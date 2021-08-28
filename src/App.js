@@ -11,8 +11,15 @@ function App() {
       relay:relay,
       type:type
     }
+    const requestOptions = {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(lobj)
+  };
+  fetch('http://localhost:3000/light', requestOptions)
+      .then(response => console.log(response))
     
-    console.log(lobj);
+   // console.log(response);
     
   }
 
