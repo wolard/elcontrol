@@ -6,9 +6,14 @@ import Buttons from './components/Buttons'
 
 function App() {
   const handleButtonClick = (card,relay,type) => {
-    console.log(card);
-    console.log(relay);
-    console.log(type);
+    let lobj= {
+      card:card,
+      relay:relay,
+      type:type
+    }
+    
+    console.log(lobj);
+    
   }
 
   const [btns, setButtons] = useState([{}]);
