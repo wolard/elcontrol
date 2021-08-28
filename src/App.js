@@ -11,7 +11,7 @@ function App() {
     console.log(type);
   }
 
-  const [btns, setButtons] = useState("");
+  const [btns, setButtons] = useState([{}]);
   useEffect(() => {
     const url = "http://localhost:3000/init";
 
@@ -30,7 +30,9 @@ function App() {
     fetchData();
 }, []);
   return (
-      <Buttons btns={btns.config} handleButtonClick={handleButtonClick} />
+      
+      <Buttons btns={btns} handleButtonClick={handleButtonClick} />
+      
    //  <h1>helle</h1>
   );
 }
