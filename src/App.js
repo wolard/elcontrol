@@ -1,7 +1,13 @@
 import React, {useState, useEffect} from 'react';
-import './App.css';
+import socketIOClient from "socket.io-client";
 
+import './App.css';
 import Buttons from './components/Buttons'
+
+
+
+const ENDPOINT = "http://192.168.0.131:8888";
+
 
 
 function App() {
@@ -16,7 +22,7 @@ function App() {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(lobj)
   };
-  fetch('http://localhost:3000/light', requestOptions)
+  fetch('http://192.168.0.131:3000/light', requestOptions)
       .then(response => console.log(response))
     
    // console.log(response);
@@ -25,7 +31,9 @@ function App() {
 
   const [btns, setButtons] = useState([{}]);
   useEffect(() => {
-    const url = "http://localhost:3000/init";
+
+   
+    const url = "http://192.168.0.131:3000/init";
 
     const fetchData = async () => {
       try {
@@ -41,6 +49,14 @@ function App() {
 
     fetchData();
 }, []);
+useEffect(() => {
+  const socket = socketIOClient(ENDPOINT);
+    
+  socket.on("FromAPI", data => {
+    console.log(data);
+  });
+
+});
   return (
       
       <Buttons btns={btns} handleButtonClick={handleButtonClick} />
