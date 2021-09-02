@@ -4,13 +4,14 @@ import socketIOClient from "socket.io-client";
 import './App.css';
 import Buttons from './components/Buttons'
 
-
-
+console.log(process.env.REACT_APP_API_IP);
+const API_IP=process.env.REACT_APP_API_IP;
 const ENDPOINT = "http://192.168.0.131:8888";
 
 
 
 function App() {
+  
   const handleButtonClick = (card,relay,type) => {
     let lobj= {
       card:card,
@@ -22,7 +23,8 @@ function App() {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(lobj)
   };
-  fetch('http://192.168.0.131:3000/light', requestOptions)
+  fetch(API_IP+':3000/light', requestOptions)
+  
       .then(response => console.log(response))
     
    // console.log(response);
@@ -33,7 +35,7 @@ function App() {
   useEffect(() => {
 
    
-    const url = "http://192.168.0.131:3000/init";
+    const url = API_IP+':3000/init';
 
     const fetchData = async () => {
       try {
