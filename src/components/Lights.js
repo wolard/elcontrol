@@ -1,7 +1,6 @@
 import React from 'react';
-import Button from '@material-ui/core/Button';
 import Grid from '@material-ui/core/Grid';
-
+import Switch from '@material-ui/core/Switch';
 import { withStyles } from '@material-ui/core/styles';
 
 const styles = () => ({
@@ -12,23 +11,27 @@ const styles = () => ({
 
 
 
-const Lights = ({ classes,lights,handleButtonClick}) => {
+const Lights = ({ classes,lights, handleChange}) => {
   
-  return lights.map((btn,index) => {
   
-    return(
-      <Grid item xs={12} sm={4} md={3}>
+  
+  
+
+  return lights.map((light,index) => 
+  (
+         
+      <Grid  item xs={12} sm={4} md={3} key={index} >
       
-<Button  key={index} variant="contained" color="primary"onClick={() => handleButtonClick(btn.card,btn.relay,btn.type)}>
-      {btn.title}
-    </Button>
+      <Switch
+        checked={light.status}
+        onChange={() =>{ handleChange(index)}}  
+        color="primary"
+        name="checkedB"
+        inputProps={{ 'aria-label': 'primary checkbox' }}
+      />
     </Grid>
-
-
-
-
-    );
-    });  
+    
+  ));  
 }
 
 export default withStyles(styles, { withTheme: true })(Lights)
