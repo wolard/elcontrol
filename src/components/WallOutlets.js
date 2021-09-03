@@ -1,8 +1,9 @@
 import React from 'react';
-import Button from '@material-ui/core/Button';
 import Grid from '@material-ui/core/Grid';
-
+import Switch from '@material-ui/core/Switch';
 import { withStyles } from '@material-ui/core/styles';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
+
 
 const styles = () => ({
   myCustomClass: {
@@ -12,23 +13,34 @@ const styles = () => ({
 
 
 
-const WallOutlets = ({ classes,outlets,handleButtonClick}) => {
+const WallOutlets = ({ classes,outlets,handleChange}) => {
   
-  return outlets.map((btn,index) => {
+  return outlets.map((outlet,index) => 
   
-    return(
-      <Grid item xs={12} sm={4} md={3}>
+    (
+      <Grid item xs={12} sm={4} md={3} key={index}>
       
-<Button  key={index} variant="contained" color="primary"onClick={() => handleButtonClick(btn.card,btn.relay,btn.type)}>
-      {btn.title}
-    </Button>
+      <FormControlLabel
+      
+
+      control={ 
+          <Switch
+            checked={outlet.status}
+            onChange={() =>{ handleChange(index)}}  
+            color="primary"
+            name="checkedB"
+            inputProps={{ 'aria-label': 'primary checkbox' }}
+          />
+      }
+          label={outlet.title}
+          />
     </Grid>
 
 
 
 
-    );
-    });  
+    
+  ));  
 }
 
 export default withStyles(styles, { withTheme: true })(WallOutlets)

@@ -3,6 +3,7 @@ import socketIOClient from "socket.io-client";
 import Grid from '@material-ui/core/Grid';
 import FormLabel from '@material-ui/core/FormLabel';
 import FormGroup from '@material-ui/core/FormGroup';
+import { withStyles, } from '@material-ui/core/styles';
 
 
 
@@ -10,7 +11,25 @@ import './App.css';
 import WallOutlets from './components/WallOutlets'
 import Lights from './components/Lights'
 
-console.log(process.env.REACT_APP_API_IP);
+
+const StyledFormlabel = withStyles({
+  root: {
+    background: 'white',
+    borderRadius: 3,
+    border: 0,
+    color: 'black',
+    height: 48,
+    padding: '15px 15px 0px 15px',
+    fontSize: 25
+    
+    
+
+  }
+
+})(FormLabel);
+
+
+
 const API_IP=process.env.REACT_APP_API_IP;
 const ENDPOINT = "http://192.168.0.131:8888";
 
@@ -18,7 +37,7 @@ const ENDPOINT = "http://192.168.0.131:8888";
 
 function App() {
   
-  const [outlets, setOutlets] = useState([{}]);
+  const [outlets, setOutlets] = useState([{status:false}]);
   const [lights, setLights] = useState([{status:false}]);
  
  /* const handleSwitch = (card,relay,type) => {
@@ -44,7 +63,7 @@ function App() {
 */
 
 
-const handleChange = (index) => {
+const handleChangeLights = (index) => {
   
   lights[index].status=!lights[index].status 
  
@@ -52,7 +71,14 @@ const handleChange = (index) => {
   console.log(newLights)
   setLights(newLights);  
   
-
+};
+const handleChangeOutlets = (index) => {
+  
+  outlets[index].status=!outlets[index].status 
+ 
+  const newOutlets = [...outlets]      
+  console.log(newOutlets)
+  setOutlets(newOutlets);  
   
 };
 
@@ -103,17 +129,17 @@ useEffect(() => {
 <>
    
     <FormGroup row>
-      <FormLabel component="legend">Laiturin pistorasiat</FormLabel>
+      <StyledFormlabel component="legend">Laiturin pistorasiat</StyledFormlabel>
     <Grid container  spacing={1}>
-        <WallOutlets outlets={outlets}  />
+        <WallOutlets outlets={outlets} handleChange={handleChangeOutlets}  />
      </Grid>
      </FormGroup>
   
 
       <FormGroup row>
-      <FormLabel component="legend">Laiturin Valot</FormLabel>
+      <StyledFormlabel component="legend">Laiturin Valot</StyledFormlabel>
     <Grid container  spacing={1}>
-       <Lights lights={lights} handleChange={handleChange} />
+       <Lights lights={lights} handleChange={handleChangeLights} />
      </Grid>
      </FormGroup>
    
