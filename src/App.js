@@ -31,14 +31,47 @@ const StyledFormlabel = withStyles({
 
 
 const API_IP=process.env.REACT_APP_API_IP;
-const ENDPOINT = "http://192.168.0.131:8888";
+/*
+const socket = socketIOClient(API_IP+':3000');
+socket.on("FromAPI", data => {
+  console.log(data.relay);
+  
+});
+*/
+let socket;
+const initiateSocketConnection = () => {
+  socket = socketIOClient(API_IP+':3000');
+  console.log(`Connecting socket...`);
+}
+const disconnectSocket = () => {
+  console.log('Disconnecting socket...');
+  if(socket) socket.disconnect();
+}
+const subscribeToChat = (cb) => {
+	socket.emit('my message', 'Hello there from React.');
+  if (!socket) return(true);
+  socket.on('my broadcast', msg => {
+    console.log('Websocket event received!');
+    return cb(null, msg);
+  });
+}
 
+const subscribeToMessages = (cb) => {
+  if (!socket) return(true);
+  socket.on('my broadcast', msg => {
+    console.log('Room event received!');
+   
+    return cb(null, msg);
+  });
+  
+}
 
 
 function App() {
   
   const [outlets, setOutlets] = useState([{status:false}]);
   const [lights, setLights] = useState([{status:false}]);
+ 
  
  /* const handleSwitch = (card,relay,type) => {
    console.log("switch");
@@ -63,15 +96,38 @@ function App() {
 */
 
 
+
 const handleChangeLights = (index) => {
-  
-  lights[index].status=!lights[index].status 
+ lights[index].status=!lights[index].status 
  
+ let card=lights[index].card;
+let relay=lights[index].relay;
+let type=lights[index].type;
   const newLights = [...lights]      
   console.log(newLights)
   setLights(newLights);  
+  let lobj= {
+    card:card,
+    relay:relay,
+    type:type
+  }
+  console.log(lobj);
+  const requestOptions = {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(lobj)
+};
+fetch(API_IP+':3000/light', requestOptions)
+
+    .then(response => response.status)
+  //  .then(data=> console.log(data))
   
 };
+
+
+
+
+
 const handleChangeOutlets = (index) => {
   
   outlets[index].status=!outlets[index].status 
@@ -82,9 +138,14 @@ const handleChangeOutlets = (index) => {
   
 };
 
- 
-  useEffect(() => {
 
+    
+
+  useEffect(() => {
+   
+    
+   
+   
  
     const url = API_IP+':3000/init';
 
@@ -110,18 +171,33 @@ const handleChangeOutlets = (index) => {
     };
 
     fetchData();
+    return () => {
+      disconnectSocket();
+    }
+    
+
+
 }, []);
 useEffect(() => {
+  if (lights) {
+    initiateSocketConnection();
+  subscribeToMessages((err, data) => {
+   console.log(data);
+    const newLights = [...lights];
 
+    let index = newLights.findIndex((obj => obj.relay === data.relay));
+  if (newLights[index]){
+   newLights[index].status=data.status;
+  setLights(newLights);  
+  }
   
-  /*
-  const socket = socketIOClient(ENDPOINT);
-    
-  socket.on("FromAPI", data => {
-    console.log(data);
   });
-*/
-});
+  return () => {
+    disconnectSocket();
+  }
+}
+
+}, [lights]);
 
 
 
