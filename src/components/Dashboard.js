@@ -131,13 +131,31 @@ fetch(API_IP+':3000/light', requestOptions)
 const handleChangeOutlets = (index) => {
   
   outlets[index].status=!outlets[index].status 
+  let card=outlets[index].card;
+  let relay=outlets[index].relay;
+  let type=outlets[index].type;
  
   const newOutlets = [...outlets]      
   console.log(newOutlets)
   setOutlets(newOutlets);  
   
+  let lobj= {
+    card:card,
+    relay:relay,
+    type:type
+  }
+  console.log(lobj);
+  const requestOptions = {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(lobj)
 };
+fetch(API_IP+':3000/light', requestOptions)
 
+    .then(response => response.status)
+  //  .then(data=> console.log(data))
+  
+};
 
     
 
