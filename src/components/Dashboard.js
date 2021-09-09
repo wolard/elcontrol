@@ -156,11 +156,11 @@ const handleChangeOutlets = (index) => {
         
        
        let lights={};
-       lights= json.filter( outl=> outl.group === "valot");
+       lights= json.filter( outl=> outl.groupname === "valot");
         console.log("lights",lights);
         
         let outlets={};
-        outlets= json.filter( outl=> outl.group === "pistorasiat" );
+        outlets= json.filter( outl=> outl.groupname === "pistorasiat" );
         console.log('outlets',outlets);
     
         setOutlets(outlets);
