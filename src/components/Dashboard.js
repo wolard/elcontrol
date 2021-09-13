@@ -67,7 +67,7 @@ const subscribeToMessages = (cb) => {
 }
 
 
-function Dashboard() {
+function Dashboard({handleLogout}) {
   
   const [outlets, setOutlets] = useState([{status:false}]);
   const [lights, setLights] = useState([{status:false}]);
@@ -221,7 +221,7 @@ useEffect(() => {
 
   return (
 <>
-   
+<button onClick={handleLogout}>Log Out</button>
     <FormGroup row>
       <StyledFormlabel component="legend">Laiturin pistorasiat</StyledFormlabel>
     <Grid container  spacing={1}>
