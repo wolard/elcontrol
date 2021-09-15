@@ -3,10 +3,10 @@ import React from 'react';
 import { BrowserRouter as Router, Route } from 'react-router-dom';
 import Landing from './components/Landing';
 import Dashboard from './components/Dashboard';
-import ProtectedRoute from './components/Protectedroute';
+
 import Unauthorized from './components/Unauthorized';
 
-const API_IP=process.env.REACT_APP_API_IP;
+
 
 function App() {
 
