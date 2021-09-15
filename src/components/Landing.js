@@ -3,13 +3,23 @@ import { useHistory } from "react-router-dom";
 import { useForm, Controller } from "react-hook-form";
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
+import { makeStyles } from '@material-ui/core/styles';
+
+const useStyles = makeStyles((theme) => ({
+  root: {
+    '& .MuiTextField-root': {
+      margin: theme.spacing(1),
+      width: '25ch',
+    },
+  },
+}));
 
 const API_IP=process.env.REACT_APP_API_IP;
 
 
 
 const Landing = ()=> {
-
+  const classes = useStyles();
 
   const {  handleSubmit, control } = useForm();
  
@@ -43,22 +53,23 @@ const Landing = ()=> {
     }
   return (
     <div>
-      <h1>Landing</h1>
+      <h1>Teijo Light control</h1>
     
 
-     
+      <form className={classes.root} noValidate autoComplete="off">
       <Controller
-          render={({ field }) => <TextField {...field} />}
+          render={({ field }) => <TextField    {...field} />}
           name="TextField"
           control={control}
         />
         <Controller
-          render={({ field }) => <TextField {...field} />}
+          render={({ field }) => <TextField  type="password" {...field} />}
           name="TextField2"
           control={control}
+         
         />
   <Button variant="contained" onClick={handleSubmit(handleLogin)}> login</Button>
-   
+   </form>
    
     </div>
   )
