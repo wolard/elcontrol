@@ -105,6 +105,7 @@ const handleLogout = e => {
 
 
 const handleChangeLights = (index) => {
+  let token = (localStorage.getItem('user'));
  lights[index].status=!lights[index].status 
  
  let card=lights[index].card;
@@ -121,7 +122,7 @@ let type=lights[index].type;
   console.log(lobj);
   const requestOptions = {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
+    headers: { 'Content-Type': 'application/json', 'x-access-token':token  },
     body: JSON.stringify(lobj)
 };
 fetch(API_IP+':3000/light', requestOptions)
@@ -136,7 +137,7 @@ fetch(API_IP+':3000/light', requestOptions)
 
 
 const handleChangeOutlets = (index) => {
-  
+  let token = (localStorage.getItem('user'));
   outlets[index].status=!outlets[index].status 
   let card=outlets[index].card;
   let relay=outlets[index].relay;
@@ -154,7 +155,7 @@ const handleChangeOutlets = (index) => {
   console.log(lobj);
   const requestOptions = {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
+    headers: { 'Content-Type': 'application/json', 'x-access-token':token  },
     body: JSON.stringify(lobj)
 };
 fetch(API_IP+':3000/light', requestOptions)
@@ -174,7 +175,7 @@ fetch(API_IP+':3000/light', requestOptions)
     //const user = JSON.parse(localStorage.getItem('user'));
     //console.log(user);
     const url = API_IP+':3000/init';
-    const token = (localStorage.getItem('user'));
+    let token = (localStorage.getItem('user'));
     const Options = {
       method: 'GET',
       headers: { 'Content-Type': 'application/json' ,
