@@ -1,4 +1,5 @@
 import React, {useState, useEffect} from 'react';
+import { useHistory } from "react-router-dom";
 import socketIOClient from "socket.io-client";
 import Grid from '@material-ui/core/Grid';
 import FormLabel from '@material-ui/core/FormLabel';
@@ -72,6 +73,7 @@ function Dashboard() {
   const [outlets, setOutlets] = useState([{status:false}]);
   const [lights, setLights] = useState([{status:false}]);
  
+  const history = useHistory();
  
  /* const handleSwitch = (card,relay,type) => {
    console.log("switch");
@@ -98,6 +100,7 @@ function Dashboard() {
 const handleLogout = e => {
   e.preventDefault();
   localStorage.removeItem('user');
+  return history.push('/');
 }
 
 

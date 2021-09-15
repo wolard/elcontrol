@@ -33,13 +33,13 @@ const Landing = ()=> {
     const json = await response.json()
     localStorage.setItem("user", json.token)
     
-    history.push('/dashboard');
     } 
     catch (error) {
       console.log("error", error);
     }
 
      
+    return history.push('/dashboard');
     }
   return (
     <div>
