@@ -1,4 +1,5 @@
 import React, {useState, useEffect} from 'react';
+import { useHistory } from "react-router-dom";
 import socketIOClient from "socket.io-client";
 import Grid from '@material-ui/core/Grid';
 import FormLabel from '@material-ui/core/FormLabel';
@@ -67,11 +68,12 @@ const subscribeToMessages = (cb) => {
 }
 
 
-function Dashboard({handleLogout}) {
+function Dashboard() {
   
   const [outlets, setOutlets] = useState([{status:false}]);
   const [lights, setLights] = useState([{status:false}]);
  
+  const history = useHistory();
  
  /* const handleSwitch = (card,relay,type) => {
    console.log("switch");
@@ -95,6 +97,11 @@ function Dashboard({handleLogout}) {
   }
 */
 
+const handleLogout = e => {
+  e.preventDefault();
+  localStorage.removeItem('user');
+  return history.push('/');
+}
 
 
 const handleChangeLights = (index) => {
@@ -164,12 +171,19 @@ fetch(API_IP+':3000/light', requestOptions)
     
    
    
- 
+    //const user = JSON.parse(localStorage.getItem('user'));
+    //console.log(user);
     const url = API_IP+':3000/init';
-
+    const token = (localStorage.getItem('user'));
+    const Options = {
+      method: 'GET',
+      headers: { 'Content-Type': 'application/json' ,
+      'x-access-token':token   },
+     };
     const fetchData = async () => {
       try {
-        const response = await fetch(url);
+        
+        const response = await fetch(url,Options);
         const json = await response.json();
         
        
