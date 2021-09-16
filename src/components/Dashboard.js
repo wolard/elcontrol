@@ -70,32 +70,11 @@ const subscribeToMessages = (cb) => {
 
 function Dashboard() {
   
-  const [outlets, setOutlets] = useState([{status:false}]);
-  const [lights, setLights] = useState([{status:false}]);
+  const [outlets, setOutlets] = useState([{'card':0,'relay':0,'type':'','status':false}]);
+  const [lights, setLights] = useState([{'card':0,'relay':0,'type':'','status':false}]);
  
   const history = useHistory();
- 
- /* const handleSwitch = (card,relay,type) => {
-   console.log("switch");
-    let lobj= {
-      card:card,
-      relay:relay,
-      type:type
-    }
-    const requestOptions = {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(lobj)
-  };
-  fetch(API_IP+':3000/light', requestOptions)
-  
-      .then(response => response.json())
-      .then(data=> console.log(data))
-    
-  
-    
-  }
-*/
+
 
 const handleLogout = e => {
   e.preventDefault();
@@ -106,18 +85,16 @@ const handleLogout = e => {
 
 const handleChangeLights = (index) => {
   let token = (localStorage.getItem('user'));
- lights[index].status=!lights[index].status 
+ lights[index].status=!lights[index].status ;
  
- let card=lights[index].card;
-let relay=lights[index].relay;
-let type=lights[index].type;
+ 
   const newLights = [...lights]      
   console.log(newLights)
   setLights(newLights);  
   let lobj= {
-    card:card,
-    relay:relay,
-    type:type
+    card:lights[index].card,
+    relay:lights[index].relay,
+    type:lights[index].type
   }
   console.log(lobj);
   const requestOptions = {
@@ -139,23 +116,21 @@ fetch(API_IP+':3000/light', requestOptions)
 const handleChangeOutlets = (index) => {
   let token = (localStorage.getItem('user'));
   outlets[index].status=!outlets[index].status 
-  let card=outlets[index].card;
-  let relay=outlets[index].relay;
-  let type=outlets[index].type;
- 
+  
+  
   const newOutlets = [...outlets]      
   console.log(newOutlets)
   setOutlets(newOutlets);  
   
   let lobj= {
-    card:card,
-    relay:relay,
-    type:type
+    card:outlets[index].card,
+    relay:outlets[index].relay,
+    type:outlets[index].type
   }
-  console.log(lobj);
+
   const requestOptions = {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json', 'x-access-token':token  },
+    headers: { 'Content-Type': 'application/json', 'x-access-token':token},
     body: JSON.stringify(lobj)
 };
 fetch(API_IP+':3000/light', requestOptions)
@@ -188,12 +163,12 @@ fetch(API_IP+':3000/light', requestOptions)
         const json = await response.json();
         
        
-       let lights={};
-       lights= json.filter( outl=> outl.groupname === "valot");
+       
+       const lights= json.filter( outl=> outl.groupname === "valot");
         console.log("lights",lights);
         
-        let outlets={};
-        outlets= json.filter( outl=> outl.groupname === "pistorasiat" );
+      
+       const outlets= json.filter( outl=> outl.groupname === "pistorasiat" );
         console.log('outlets',outlets);
     
         setOutlets(outlets);
@@ -205,7 +180,7 @@ fetch(API_IP+':3000/light', requestOptions)
 
     fetchData();
     return () => {
-      disconnectSocket();
+     
     }
     
 
@@ -225,11 +200,13 @@ useEffect(() => {
   }
   
   });
+  disconnectSocket();
   return () => {
-    disconnectSocket();
-  }
+    
+  //  disconnectSocket();
+  
 }
-
+  }
 }, [lights]);
 
 
