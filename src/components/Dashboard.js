@@ -192,8 +192,9 @@ fetch(API_IP+':3000/light', requestOptions)
 useEffect(() => {
   if (lights) {
   //  
+  initiateSocketConnection();
   subscribeToMessages((err, data) => {
-    initiateSocketConnection();
+   
     console.log('received event');
     console.log(data);
     const newLights = [...lights];
