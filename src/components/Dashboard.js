@@ -44,6 +44,7 @@ const initiateSocketConnection = () => {
   socket = socketIOClient(API_IP+':3000');
   console.log(`Connecting socket...`);
 }
+initiateSocketConnection();
 const disconnectSocket = () => {
   console.log('Disconnecting socket...');
   if(socket) socket.disconnect();
@@ -188,22 +189,25 @@ fetch(API_IP+':3000/light', requestOptions)
 }, []);
 useEffect(() => {
   if (lights) {
-    initiateSocketConnection();
+  //  
   subscribeToMessages((err, data) => {
-   console.log(data);
+    initiateSocketConnection();
+    console.log('received event');
+    console.log(data);
     const newLights = [...lights];
 
     let index = newLights.findIndex((obj => obj.relay === data.relay));
   if (newLights[index]){
    newLights[index].status=data.status;
   setLights(newLights);  
-  }
-  
+  disconnectSocket(); 
+}
+ 
   });
-  disconnectSocket();
+  
   return () => {
-    
-  //  disconnectSocket();
+   
+  
   
 }
   }
