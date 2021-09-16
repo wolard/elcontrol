@@ -5,6 +5,7 @@ import Grid from '@material-ui/core/Grid';
 import FormLabel from '@material-ui/core/FormLabel';
 import FormGroup from '@material-ui/core/FormGroup';
 import { withStyles, } from '@material-ui/core/styles';
+import Button from '@material-ui/core/Button';
 
 
 
@@ -49,6 +50,7 @@ const disconnectSocket = () => {
   console.log('Disconnecting socket...');
   if(socket) socket.disconnect();
 }
+/*
 const subscribeToChat = (cb) => {
 	socket.emit('my message', 'Hello there from React.');
   if (!socket) return(true);
@@ -57,7 +59,7 @@ const subscribeToChat = (cb) => {
     return cb(null, msg);
   });
 }
-
+*/
 const subscribeToMessages = (cb) => {
   if (!socket) return(true);
   socket.on('my broadcast', msg => {
@@ -217,7 +219,8 @@ useEffect(() => {
 
   return (
 <>
-<button onClick={handleLogout}>Log Out</button>
+
+<Button variant="contained" onClick={handleLogout}> logout</Button>
     <FormGroup row>
       <StyledFormlabel component="legend">Laiturin pistorasiat</StyledFormlabel>
     <Grid container  spacing={1}>
