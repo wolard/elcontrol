@@ -6,7 +6,9 @@ import FormLabel from '@material-ui/core/FormLabel';
 import FormGroup from '@material-ui/core/FormGroup';
 import { withStyles, } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
-
+import { AppBar } from '@material-ui/core';
+import { Box } from '@material-ui/core';
+import { Typography } from '@material-ui/core'
 
 
 //import './App.css';
@@ -220,8 +222,17 @@ useEffect(() => {
 
   return (
 <>
+<Box sx={{ flexGrow: 1 }}>
+      <AppBar position="static">
+        
+        
+          <Typography variant="h3" component="div" sx={{ flexGrow: 1 }}>
+            Teijo Elcontrol
+          </Typography>
+         
+      </AppBar>
+    </Box>
 
-<Button variant="contained" onClick={handleLogout}> logout</Button>
     <FormGroup row>
       <StyledFormlabel component="legend">Laiturin pistorasiat</StyledFormlabel>
     <Grid container  spacing={1}>
@@ -236,7 +247,7 @@ useEffect(() => {
        <Lights lights={lights} handleChange={handleChangeLights} />
      </Grid>
      </FormGroup>
-   
+     <Button variant="contained" onClick={handleLogout}> logout</Button>
   
   </>
   );

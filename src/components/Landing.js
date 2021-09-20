@@ -5,6 +5,9 @@ import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 import { makeStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
+import { AppBar } from '@material-ui/core';
+import { Box } from '@material-ui/core';
+import { Typography } from '@material-ui/core'
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -64,7 +67,16 @@ const Landing = () => {
     }
     return (
     <div>
-      <h1>Teijo Light control</h1>
+    <Box sx={{ flexGrow: 10}}>
+      <AppBar position="static">
+        
+        
+          <Typography variant="h3" component="div" sx={{ flexGrow: 1 }}>
+            Teijo Elcontrol
+          </Typography>
+         
+      </AppBar>
+    </Box>
     
 
       <form className={classes.root} noValidate autoComplete="off">
