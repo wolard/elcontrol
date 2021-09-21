@@ -7,8 +7,9 @@ import FormGroup from '@material-ui/core/FormGroup';
 import { withStyles, } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
 import { AppBar } from '@material-ui/core';
-import { Box } from '@material-ui/core';
+import { Container } from '@material-ui/core';
 import { Typography } from '@material-ui/core'
+import { makeStyles } from '@material-ui/core/styles';
 
 
 //import './App.css';
@@ -16,22 +17,29 @@ import WallOutlets from './WallOutlets'
 import Lights from './Lights'
 
 
-const StyledFormlabel = withStyles({
+const StyledFormlabel = withStyles({    //another way modifying css
   root: {
     background: 'white',
     borderRadius: 3,
     border: 0,
     color: 'black',
     height: 48,
-    padding: '15px 15px 0px 15px',
+    margin: '15px 15px 0px 15px',
     fontSize: 25
-    
+   
     
 
-  }
+  },
+ 
 
 })(FormLabel);
 
+const useStyles = makeStyles((theme) => ({
+ 
+  appbar: {
+    padding:'5px'
+  }
+}));
 
 
 const API_IP=process.env.REACT_APP_API_IP;
@@ -79,6 +87,7 @@ function Dashboard() {
   const [lights, setLights] = useState([{'card':0,'relay':0,'type':'','status':false}]);
  
   const history = useHistory();
+  const classes = useStyles();
 
 
 const handleLogout = e => {
@@ -221,9 +230,9 @@ useEffect(() => {
 
 
   return (
-<>
-<Box sx={{ flexGrow: 1 }}>
-      <AppBar position="static">
+
+<Container maxWidth="sm">
+      <AppBar position="static" className={classes.appbar}>
         
         
           <Typography variant="h3" component="div" sx={{ flexGrow: 1 }}>
@@ -231,7 +240,7 @@ useEffect(() => {
           </Typography>
          
       </AppBar>
-    </Box>
+ 
 
     <FormGroup row>
       <StyledFormlabel component="legend">Laiturin pistorasiat</StyledFormlabel>
@@ -248,8 +257,10 @@ useEffect(() => {
      </Grid>
      </FormGroup>
      <Button variant="contained" onClick={handleLogout}> logout</Button>
+ 
   
-  </>
+
+  </Container>
   );
 }
 

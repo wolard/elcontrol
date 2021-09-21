@@ -1,15 +1,14 @@
 import { createTheme } from '@material-ui/core/styles';
+import { blue } from '@material-ui/core/colors';
 
 export const theme = createTheme({
     root: {
-        flexGrow: 1
+        flexGrow: 1,
+        width:500,
+        
+        
       },
-    palette: {
-        primary: {
-            main: '#2C5F2D',
-        },
-        secondary: {
-            main: '#97BC62',
-        }
-     }        
+      palette: {
+        primary: blue,
+      },     
 });
