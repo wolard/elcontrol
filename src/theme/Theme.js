@@ -4,7 +4,7 @@ import { blue } from '@material-ui/core/colors';
 export const theme = createTheme({
     root: {
         flexGrow: 1,
-        width:500,
+        
         
         
       },

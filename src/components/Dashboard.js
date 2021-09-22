@@ -10,6 +10,11 @@ import { AppBar } from '@material-ui/core';
 import { Container } from '@material-ui/core';
 import { Typography } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles';
+import { Toolbar } from '@material-ui/core';
+import { Box } from '@material-ui/core';
+
+
+
 
 
 //import './App.css';
@@ -19,7 +24,7 @@ import Lights from './Lights'
 
 const StyledFormlabel = withStyles({    //another way modifying css
   root: {
-    background: 'white',
+   
     borderRadius: 3,
     border: 0,
     color: 'black',
@@ -38,6 +43,9 @@ const useStyles = makeStyles((theme) => ({
  
   appbar: {
     padding:'5px'
+  },
+  Typography:{
+    flexGrow:1
   }
 }));
 
@@ -230,18 +238,21 @@ useEffect(() => {
 
 
   return (
+    <>
+    <Container maxWidth="sm">
+    <Box sx={{ flexGrow: 1 }}>
 
-<Container maxWidth="sm">
       <AppBar position="static" className={classes.appbar}>
+      <Toolbar>
         
-        
-          <Typography variant="h3" component="div" sx={{ flexGrow: 1 }}>
+          <Typography variant="h3" component="div" className={classes.Typography}>
             Teijo Elcontrol
           </Typography>
-         
+          <Button variant="contained" onClick={handleLogout}> logout</Button>
+          </Toolbar>
       </AppBar>
+ </Box>
  
-
     <FormGroup row>
       <StyledFormlabel component="legend">Laiturin pistorasiat</StyledFormlabel>
     <Grid container  spacing={1}>
@@ -256,11 +267,13 @@ useEffect(() => {
        <Lights lights={lights} handleChange={handleChangeLights} />
      </Grid>
      </FormGroup>
-     <Button variant="contained" onClick={handleLogout}> logout</Button>
+   
+   </Container>
+   </>
  
   
 
-  </Container>
+ 
   );
 }
 

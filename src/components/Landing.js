@@ -7,7 +7,8 @@ import { makeStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
 import { AppBar } from '@material-ui/core';
 import { Container } from '@material-ui/core';
-import { Typography } from '@material-ui/core'
+import { Typography } from '@material-ui/core';
+import FormGroup from '@material-ui/core/FormGroup';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -19,6 +20,9 @@ const useStyles = makeStyles((theme) => ({
   appbar: {
     padding:'5px'
   },
+  formGroup: {
+    alignItems: 'center'
+  }
 }));
 
 const API_IP = process.env.REACT_APP_API_IP;
@@ -74,14 +78,14 @@ const Landing = () => {
       <AppBar className={classes.appbar} position="static" >
         
         
-          <Typography variant="h3" component="div" sx={{ flexGrow: 1 }}>
+          <Typography variant="h3" component="div" >
             Teijo Elcontrol
           </Typography>
          
       </AppBar>
    
     
-
+      <FormGroup className={classes.formGroup} noValidate autoComplete="on">
       <form className={classes.root} noValidate autoComplete="off">
       <Grid  item xs={12} sm={12} md={12} >
       <Controller
@@ -102,6 +106,7 @@ const Landing = () => {
   <p>{loggedIn}</p>
   </Grid>
    </form>
+   </FormGroup>
   </Container>
   )
 };
