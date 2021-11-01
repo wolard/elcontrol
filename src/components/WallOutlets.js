@@ -3,6 +3,7 @@ import Grid from '@material-ui/core/Grid';
 import Switch from '@material-ui/core/Switch';
 import { withStyles } from '@material-ui/core/styles';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
+import FormLabel from '@material-ui/core/FormLabel';
 
 
 const styles = () => ({
@@ -19,7 +20,7 @@ const WallOutlets = ({ classes,outlets,handleChange}) => {
   
     (
       <Grid item xs={12} sm={4} md={3} key={index}>
-      
+      <FormLabel component="legend">kulutus kwh</FormLabel>
       <FormControlLabel
       
 
