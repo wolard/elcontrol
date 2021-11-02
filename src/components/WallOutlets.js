@@ -14,13 +14,13 @@ const styles = () => ({
 
 
 
-const WallOutlets = ({ classes,outlets,handleChange}) => {
+const WallOutlets = ({ classes,outlets,handleChange,kwhs}) => {
   
   return outlets.map((outlet,index) => 
   
     (
       <Grid item xs={12} sm={4} md={3} key={index}>
-      <FormLabel component="legend">kulutus kwh</FormLabel>
+      <FormLabel component="legend">{kwhs[index]} kwh</FormLabel>
       <FormControlLabel
       
 

@@ -93,7 +93,7 @@ function Dashboard() {
   
   const [outlets, setOutlets] = useState([{'card':0,'relay':0,'type':'','status':false}]);
   const [lights, setLights] = useState([{'card':0,'relay':0,'type':'','status':false}]);
- 
+  const [kwhs, setKwhs] = useState([0,0,0,0,0,0,0,0,0]);
   const history = useHistory();
   const classes = useStyles();
 
@@ -199,12 +199,31 @@ fetch(API_IP+':3000/light', requestOptions)
         console.log("error", error);
       }
     };
-
+    const fetchKwh = async () => {
+      try {
+        
+        const response = await fetch(url,Options);
+        const json = await response.json();
+        
+       
+          
+       const outlets= json.filter( outl=> outl.groupname === "pistorasiat" );
+       const kwhs=outlets.map(a=>a.kwh)
+        console.log('kwhs',kwhs);
+        const newKwhs = [...kwhs]   
+        setKwhs(newKwhs)   
+       
+      
+      
+      } catch (error) {
+        console.log("error", error);
+      }
+    };
     fetchData();
-    return () => {
-     
-    }
-    
+    const interval=setInterval(()=>{
+      fetchKwh()
+     },1000)
+     return()=>clearInterval(interval)
 
 
 }, []);
@@ -227,16 +246,12 @@ useEffect(() => {
  
   });
   
-  return () => {
-   
-  
-  
-}
+
   }
 }, [lights]);
 
-
-
+ 
+   
   return (
     <>
     <Container maxWidth="sm">
@@ -256,7 +271,7 @@ useEffect(() => {
     <FormGroup row>
       <StyledFormlabel component="legend">Laiturin pistorasiat</StyledFormlabel>
     <Grid container  spacing={1}>
-        <WallOutlets outlets={outlets} handleChange={handleChangeOutlets}  />
+        <WallOutlets kwhs={kwhs} outlets={outlets} handleChange={handleChangeOutlets}  />
      </Grid>
      </FormGroup>
   
