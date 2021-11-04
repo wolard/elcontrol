@@ -59,11 +59,13 @@ socket.on("FromAPI", data => {
 });
 */
 let socket;
-const initiateSocketConnection = () => {
+const initiateSocketConnection = (room) => {
   socket = socketIOClient(API_IP+':3000');
   console.log(`Connecting socket...`);
+  if (socket && room) socket.emit('join', 'chat');
+
 }
-initiateSocketConnection();
+initiateSocketConnection('chat');
 const disconnectSocket = () => {
   console.log('Disconnecting socket...');
   if(socket) socket.disconnect();
@@ -80,7 +82,8 @@ const subscribeToChat = (cb) => {
 */
 const subscribeToMessages = (cb) => {
   if (!socket) return(true);
-  socket.on('my broadcast', msg => {
+  
+  socket.on('chat', msg => {
     console.log('Room event received!');
    
     return cb(null, msg);
@@ -209,7 +212,7 @@ fetch(API_IP+':3000/light', requestOptions)
           
        const outlets= json.filter( outl=> outl.groupname === "pistorasiat" );
        const kwhs=outlets.map(a=>a.kwh)
-        console.log('kwhs',kwhs);
+      
         const newKwhs = [...kwhs]   
         setKwhs(newKwhs)   
        
@@ -223,32 +226,67 @@ fetch(API_IP+':3000/light', requestOptions)
     const interval=setInterval(()=>{
       fetchKwh()
      },1000)
-     return()=>clearInterval(interval)
 
+  
+     return()=>{
+     clearInterval(interval)
+    
+      disconnectSocket();
+    
+    }
 
 }, []);
 useEffect(() => {
   if (lights) {
   //  
-  initiateSocketConnection();
-  subscribeToMessages((err, data) => {
+  //initiateSocketConnection('chat');
+  //subscribeToMessages((err, data) => {
    
-    console.log('received event');
-    console.log(data);
-    const newLights = [...lights];
+  
+    //console.log('lightstatus',data);
+    //const newLights = [...lights];
+  
 
-    let index = newLights.findIndex((obj => obj.relay === data.relay));
-  if (newLights[index]){
-   newLights[index].status=data.status;
-  setLights(newLights);  
-  disconnectSocket(); 
-}
- 
-  });
+   
+
+
+  //setLights(newLights);  
+  //disconnectSocket(); 
+
+
   
 
   }
 }, [lights]);
+
+useEffect(() => {
+  if (outlets) initiateSocketConnection('chat');
+ 
+   
+ 
+    //  
+ 
+  subscribeToMessages((err, data) => {
+    if(err) return;
+   
+    console.log('lightstatus',data);
+    const newOutlets = [...outlets];
+   
+    newOutlets[data.num].status= data.state
+    console.log('newoutlets',newOutlets[data.num])});
+
+   
+
+
+  return () => {
+    disconnectSocket();
+  }
+  
+}
+
+  
+  
+, [outlets]);
 
  
    
