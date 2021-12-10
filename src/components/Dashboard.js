@@ -59,10 +59,10 @@ socket.on("FromAPI", data => {
 });
 */
 let socket;
-const initiateSocketConnection = (room) => {
+const initiateSocketConnection = () => {
   socket = socketIOClient(API_IP+':3000');
   console.log(`Connecting socket...`);
-  if (socket && room) socket.emit('join', 'chat');
+ 
 
 }
 initiateSocketConnection('chat');
@@ -83,8 +83,8 @@ const subscribeToChat = (cb) => {
 const subscribeToMessages = (cb) => {
   if (!socket) return(true);
   
-  socket.on('chat', msg => {
-    console.log('Room event received!');
+  socket.on('ioboard', msg => {
+    console.log(msg);
    
     return cb(null, msg);
   });
@@ -212,6 +212,7 @@ fetch(API_IP+':3000/light', requestOptions)
           
        const outlets= json.filter( outl=> outl.groupname === "pistorasiat" );
        const kwhs=outlets.map(a=>a.kwh)
+       //console.log(kwhs)
       
         const newKwhs = [...kwhs]   
         setKwhs(newKwhs)   
@@ -239,45 +240,58 @@ fetch(API_IP+':3000/light', requestOptions)
 useEffect(() => {
   if (lights) {
   //  
-  //initiateSocketConnection('chat');
-  //subscribeToMessages((err, data) => {
-   
+  initiateSocketConnection();
+  /*
+  subscribeToMessages((err, data) => {
+    if(err) return;
+   console.log(lights);
   
-    //console.log('lightstatus',data);
-    //const newLights = [...lights];
+    console.log('lightstatus',data);
+    const newLights = [...lights];
+    newLights[data.num].status= data.state
+
   
 
-   
 
-
-  //setLights(newLights);  
+  setLights(newLights);  
   //disconnectSocket(); 
 
 
   
+    
+  });
 
+  return () => {
+    disconnectSocket();
   }
+   */
+}
 }, [lights]);
-
+ 
 useEffect(() => {
-  if (outlets) initiateSocketConnection('chat');
+ 
+  if (outlets) initiateSocketConnection();
  
    
  
-    //  
+      
  
   subscribeToMessages((err, data) => {
     if(err) return;
+    
    
-    console.log('lightstatus',data);
+      
+    console.log('outletstatus',data);
     const newOutlets = [...outlets];
    
     newOutlets[data.num].status= data.state
-    console.log('newoutlets',newOutlets[data.num])});
-
+    setOutlets(newOutlets);  
+    //console.log('newoutlets',newOutlets[data.num])
+  }
+    
    
 
-
+    );
   return () => {
     disconnectSocket();
   }

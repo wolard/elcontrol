@@ -20,7 +20,7 @@ const WallOutlets = ({ classes,outlets,handleChange,kwhs}) => {
   
     (
       <Grid item xs={12} sm={4} md={3} key={index}>
-      <FormLabel component="legend">{kwhs[index]} kwh</FormLabel>
+      <FormLabel component="legend">{kwhs[index]/2000} kwh</FormLabel>
       <FormControlLabel
       
 
