@@ -59,13 +59,14 @@ socket.on("FromAPI", data => {
 });
 */
 let socket;
-const initiateSocketConnection = () => {
+const initiateSocketConnection =  () => {
   socket = socketIOClient(API_IP+':3000');
   console.log(`Connecting socket...`);
+  console.log(socket)
  
 
 }
-initiateSocketConnection('chat');
+
 const disconnectSocket = () => {
   console.log('Disconnecting socket...');
   if(socket) socket.disconnect();
@@ -80,7 +81,7 @@ const subscribeToChat = (cb) => {
   });
 }
 */
-const subscribeToMessages = (cb) => {
+const subscribeToIoboard = (cb) => {
   if (!socket) return(true);
   
   socket.on('ioboard', msg => {
@@ -92,16 +93,19 @@ const subscribeToMessages = (cb) => {
 }
 
 
+
 function Dashboard() {
-  
+ 
+  console.log('in function')
   const [outlets, setOutlets] = useState([{'card':0,'relay':0,'type':'','status':false}]);
   const [lights, setLights] = useState([{'card':0,'relay':0,'type':'','status':false}]);
-  const [kwhs, setKwhs] = useState([0,0,0,0,0,0,0,0,0]);
+  const [watts, setWatts] = useState([0,0,0,0,0,0,0,0,0]);
   const history = useHistory();
   const classes = useStyles();
 
 
 const handleLogout = e => {
+ 
   e.preventDefault();
   localStorage.removeItem('user');
   return history.push('/');
@@ -140,19 +144,20 @@ fetch(API_IP+':3000/light', requestOptions)
 
 const handleChangeOutlets = (index) => {
   let token = (localStorage.getItem('user'));
+  /*
   outlets[index].status=!outlets[index].status 
   
   
   const newOutlets = [...outlets]      
   console.log(newOutlets)
   setOutlets(newOutlets);  
-  
+  */
   let lobj= {
     card:outlets[index].card,
     relay:outlets[index].relay,
     type:outlets[index].type
   }
-
+console.log(lobj)
   const requestOptions = {
     method: 'POST',
     headers: { 'Content-Type': 'application/json', 'x-access-token':token},
@@ -168,10 +173,20 @@ fetch(API_IP+':3000/light', requestOptions)
     
 
   useEffect(() => {
+    initiateSocketConnection();
    
-    
+
    
+  
    
+    if (socket)
+    {
+    socket.on('watts', msg => {
+
+      setWatts(msg)
+      console.log(msg)
+    });
+    }
     //const user = JSON.parse(localStorage.getItem('user'));
     //console.log(user);
     const url = API_IP+':3000/init';
@@ -189,50 +204,29 @@ fetch(API_IP+':3000/light', requestOptions)
         
        
        
-       const lights= json.filter( outl=> outl.groupname === "valot");
-        console.log("lights",lights);
+       const lghts= json.filter( outl=> outl.groupname === "valot");
+      //  console.log("lights",lights);
         
       
-       const outlets= json.filter( outl=> outl.groupname === "pistorasiat" );
-        console.log('outlets',outlets);
+       const outl= json.filter( outl=> outl.groupname === "pistorasiat" );
+       // console.log('outlets',outlets);
     
-        setOutlets(outlets);
-        setLights(lights);
-      } catch (error) {
-        console.log("error", error);
-      }
-    };
-    const fetchKwh = async () => {
-      try {
-        
-        const response = await fetch(url,Options);
-        const json = await response.json();
-        
-       
-          
-       const outlets= json.filter( outl=> outl.groupname === "pistorasiat" );
-       const kwhs=outlets.map(a=>a.kwh)
-       //console.log(kwhs)
-      
-        const newKwhs = [...kwhs]   
-        setKwhs(newKwhs)   
-       
-      
-      
+        setOutlets(outl);
+        setLights(lghts);
       } catch (error) {
         console.log("error", error);
       }
     };
     fetchData();
-    const interval=setInterval(()=>{
-      fetchKwh()
-     },1000)
 
-  
      return()=>{
-     clearInterval(interval)
-    
+     //clearInterval(interval)
+    console.log('clearing')
+     // socket.off("watts");
+   
       disconnectSocket();
+     
+   
     
     }
 
@@ -240,7 +234,7 @@ fetch(API_IP+':3000/light', requestOptions)
 useEffect(() => {
   if (lights) {
   //  
-  initiateSocketConnection();
+ // initiateSocketConnection();
   /*
   subscribeToMessages((err, data) => {
     if(err) return;
@@ -270,30 +264,34 @@ useEffect(() => {
  
 useEffect(() => {
  
-  if (outlets) initiateSocketConnection();
- 
-   
- 
-      
- 
-  subscribeToMessages((err, data) => {
-    if(err) return;
-    
-   
-      
-    console.log('outletstatus',data);
+ // if (outlets) initiateSocketConnection();
+  subscribeToIoboard((err, data) => {
+    if(err) return;  
+    //console.log('outletstatus',data);
     const newOutlets = [...outlets];
-   
-    newOutlets[data.num].status= data.state
+    const outlet= newOutlets.filter( outl=> outl.relay === data.num );
+    console.log(outlet);
+    outlet.status=data.state
+    newOutlets[data.num-1].status= data.state
     setOutlets(newOutlets);  
     //console.log('newoutlets',newOutlets[data.num])
   }
-    
-   
 
     );
+    /*
+    subscribeToWatts((err, data) => {
+      if(err) return;  
+      
+      setWatts(data);  
+      //console.log('newoutlets',newOutlets[data.num])
+    })
+*/
+
   return () => {
-    disconnectSocket();
+   // disconnectSocket();
+    //socket.off("watts");
+    socket.off("ioboard");
+   // disconnectSocket();
   }
   
 }
@@ -323,7 +321,7 @@ useEffect(() => {
     <FormGroup row>
       <StyledFormlabel component="legend">Laiturin pistorasiat</StyledFormlabel>
     <Grid container  spacing={1}>
-        <WallOutlets kwhs={kwhs} outlets={outlets} handleChange={handleChangeOutlets}  />
+        <WallOutlets watts={watts} outlets={outlets} handleChange={handleChangeOutlets}  />
      </Grid>
      </FormGroup>
   

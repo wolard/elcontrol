@@ -14,13 +14,13 @@ const styles = () => ({
 
 
 
-const WallOutlets = ({ classes,outlets,handleChange,kwhs}) => {
-  
-  return outlets.map((outlet,index) => 
+const WallOutlets = ({ classes,outlets,handleChange,watts}) => {
+console.log('outs',outlets)
+  return outlets.map((outlet,index) =>   
   
     (
       <Grid item xs={12} sm={4} md={3} key={index}>
-      <FormLabel component="legend">{kwhs[index]/2000} kwh</FormLabel>
+      <FormLabel component="legend">Kulutus:{watts[index]}W</FormLabel>
       <FormControlLabel
       
 
@@ -41,7 +41,8 @@ const WallOutlets = ({ classes,outlets,handleChange,kwhs}) => {
 
 
     
-  ));  
+    ));  
+  
 }
 
 export default withStyles(styles, { withTheme: true })(WallOutlets)
