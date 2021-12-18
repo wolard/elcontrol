@@ -80,7 +80,7 @@ const subscribeToChat = (cb) => {
     return cb(null, msg);
   });
 }
-*/
+
 const subscribeToIoboard = (cb) => {
   if (!socket) return(true);
   
@@ -91,7 +91,7 @@ const subscribeToIoboard = (cb) => {
   });
   
 }
-
+*/
 
 
 function Dashboard() {
@@ -270,6 +270,16 @@ useEffect(() => {
 useEffect(() => {
  
  // if (outlets) initiateSocketConnection();
+ socket.on('ioboard', data => {
+  const newOutlets = [...outlets];
+  const outlet= newOutlets.filter( outl=> outl.relay === data.num );
+  console.log(outlet);
+  outlet.status=Boolean(data.state)
+  newOutlets[data.num-1].status= data.state
+  setOutlets(newOutlets); 
+  console.log(data);
+ })
+ /*
   subscribeToIoboard((err, data) => {
     if(err) return;  
     //console.log('outletstatus',data);
@@ -283,7 +293,7 @@ useEffect(() => {
   }
 
     );
-    /*
+    
     subscribeToWatts((err, data) => {
       if(err) return;  
       

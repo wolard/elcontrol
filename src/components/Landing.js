@@ -36,8 +36,7 @@ const Landing = () => {
     const {
       handleSubmit,
       control
-    } = useForm();
-
+    } = useForm()
     const history = useHistory();
 
     const handleLogin = async data => {
@@ -89,9 +88,11 @@ const Landing = () => {
       <form className={classes.root} noValidate autoComplete="off">
       <Grid  item xs={12} sm={12} md={12} >
       <Controller
-          render={({ field }) => <TextField    {...field} />}
+          render={({ field }) => <TextField   {...field} />}
           name="TextField"
           control={control}
+          defaultValue="wolard"
+          
         />
         </Grid>
         <Grid  item xs={12} sm={12} md={12} >
@@ -99,6 +100,7 @@ const Landing = () => {
           render={({ field}) => <TextField  type="password" {...field} />}
           name="TextField2"
           control={control}
+          defaultValue=""
         />
         </Grid>
         <Grid  item xs={12} sm={12} md={12} >
