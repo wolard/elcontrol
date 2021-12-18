@@ -96,7 +96,7 @@ const subscribeToIoboard = (cb) => {
 
 function Dashboard() {
  
-  console.log('in function')
+
   const [outlets, setOutlets] = useState([{'card':0,'relay':0,'type':'','status':false}]);
   const [lights, setLights] = useState([{'card':0,'relay':0,'type':'','status':false}]);
   const [watts, setWatts] = useState([0,0,0,0,0,0,0,0,0]);
@@ -201,15 +201,20 @@ fetch(API_IP+':3000/light', requestOptions)
         
         const response = await fetch(url,Options);
         const json = await response.json();
-        
+        json.forEach(e => {
+          //e.status = Boolean(e.status);
+          
+        });
+   
        
-       
-       const lghts= json.filter( outl=> outl.groupname === "valot");
-      //  console.log("lights",lights);
+        const lghts= json.filter( outl=> outl.groupname === "valot");
+        console.log("lights",lghts);
+      
         
       
        const outl= json.filter( outl=> outl.groupname === "pistorasiat" );
-       // console.log('outlets',outlets);
+       
+       console.log('outlets',outl);
     
         setOutlets(outl);
         setLights(lghts);
@@ -271,7 +276,7 @@ useEffect(() => {
     const newOutlets = [...outlets];
     const outlet= newOutlets.filter( outl=> outl.relay === data.num );
     console.log(outlet);
-    outlet.status=data.state
+    outlet.status=Boolean(data.state)
     newOutlets[data.num-1].status= data.state
     setOutlets(newOutlets);  
     //console.log('newoutlets',newOutlets[data.num])
