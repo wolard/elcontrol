@@ -202,7 +202,7 @@ fetch(API_IP+':3000/light', requestOptions)
         const response = await fetch(url,Options);
         const json = await response.json();
         json.forEach(e => {
-          //e.status = Boolean(e.status);
+          e.status = Boolean(e.status);
           
         });
    
