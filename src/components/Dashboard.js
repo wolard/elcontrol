@@ -12,6 +12,8 @@ import { Typography } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles';
 import { Toolbar } from '@material-ui/core';
 import { Box } from '@material-ui/core';
+import {Link} from "react-router-dom";
+
 
 
 
@@ -100,6 +102,7 @@ function Dashboard() {
   const [outlets, setOutlets] = useState([{'card':0,'relay':0,'type':'','status':false}]);
   const [lights, setLights] = useState([{'card':0,'relay':0,'type':'','status':false}]);
   const [watts, setWatts] = useState([0,0,0,0,0,0,0,0,0]);
+  const [disabled, setDisabled] = useState(false);
   const history = useHistory();
   const classes = useStyles();
 
@@ -144,6 +147,7 @@ fetch(API_IP+':3000/light', requestOptions)
 
 const handleChangeOutlets = (index) => {
   let token = (localStorage.getItem('user'));
+  setDisabled(true)
   /*
   outlets[index].status=!outlets[index].status 
   
@@ -165,7 +169,7 @@ console.log(lobj)
 };
 fetch(API_IP+':3000/light', requestOptions)
 
-    .then(response => response.status)
+    .then(response => setDisabled(false))
   //  .then(data=> console.log(data))
   
 };
@@ -328,6 +332,8 @@ useEffect(() => {
           <Typography variant="h3" component="div" className={classes.Typography}>
             Teijo Elcontrol
           </Typography>
+          <Link to="/Search">Search for Kwhs</Link>
+
           <Button variant="contained" onClick={handleLogout}> logout</Button>
           </Toolbar>
       </AppBar>
@@ -336,7 +342,7 @@ useEffect(() => {
     <FormGroup row>
       <StyledFormlabel component="legend">Laiturin pistorasiat</StyledFormlabel>
     <Grid container  spacing={1}>
-        <WallOutlets watts={watts} outlets={outlets} handleChange={handleChangeOutlets}  />
+        <WallOutlets watts={watts} outlets={outlets} handleChange={handleChangeOutlets} disabled={disabled} />
      </Grid>
      </FormGroup>
   

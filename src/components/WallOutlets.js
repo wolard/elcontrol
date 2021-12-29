@@ -14,7 +14,7 @@ const styles = () => ({
 
 
 
-const WallOutlets = ({ classes,outlets,handleChange,watts}) => {
+const WallOutlets = ({ classes,outlets,handleChange,watts,disabled}) => {
 console.log('outs',outlets)
   return outlets.map((outlet,index) =>   
   
@@ -26,6 +26,7 @@ console.log('outs',outlets)
 
       control={ 
           <Switch
+            disabled={disabled}	
             checked={outlet.status}
             onChange={() =>{ handleChange(index)}}  
             color="primary"
