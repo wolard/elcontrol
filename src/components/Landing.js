@@ -1,15 +1,8 @@
 import React, {useState,} from 'react';
 import { useHistory } from "react-router-dom";
 import { useForm, Controller } from "react-hook-form";
-import TextField from '@material-ui/core/TextField';
-import Button from '@material-ui/core/Button';
-import { makeStyles } from '@material-ui/core/styles';
-import Grid from '@material-ui/core/Grid';
-import { AppBar } from '@material-ui/core';
-import { Container } from '@material-ui/core';
-import { Typography } from '@material-ui/core';
-import FormGroup from '@material-ui/core/FormGroup';
-
+import { makeStyles } from '@mui/styles';
+import { AppBar,Container,Typography,Button,FormGroup,Grid,TextField} from '@mui/material';
 const useStyles = makeStyles((theme) => ({
   root: {
     '& .MuiTextField-root': {
@@ -19,6 +12,7 @@ const useStyles = makeStyles((theme) => ({
   },
   appbar: {
     padding:'5px'
+
   },
   formGroup: {
     alignItems: 'center'

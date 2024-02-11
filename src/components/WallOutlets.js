@@ -1,10 +1,9 @@
 import React from 'react';
-import Grid from '@material-ui/core/Grid';
-import Switch from '@material-ui/core/Switch';
-import { withStyles } from '@material-ui/core/styles';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import FormLabel from '@material-ui/core/FormLabel';
 
+import { withStyles } from '@mui/styles';
+
+
+import {FormControlLabel,FormLabel,Grid,Switch} from '@mui/material';
 
 const styles = () => ({
   myCustomClass: {

@@ -1,5 +1,5 @@
-import { createTheme } from '@material-ui/core/styles';
-import { blue } from '@material-ui/core/colors';
+import { createTheme } from '@mui/material/styles';
+import { blue } from '@mui/material/colors';
 
 export const theme = createTheme({
     root: {

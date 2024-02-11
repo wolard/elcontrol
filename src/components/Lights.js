@@ -1,8 +1,8 @@
 import React from 'react';
-import Grid from '@material-ui/core/Grid';
-import Switch from '@material-ui/core/Switch';
-import { withStyles} from '@material-ui/core/styles';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
+
+import { Grid,Switch,FormControlLabel} from '@mui/material';
+import { withStyles} from '@mui/styles';
+
 
 
 const styles = () => ({

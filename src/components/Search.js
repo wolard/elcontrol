@@ -1,12 +1,7 @@
 import React from 'react';
-import { Container } from '@material-ui/core';
-import Grid from '@material-ui/core/Grid';
-import FormGroup from '@material-ui/core/FormGroup';
 import { useForm, Controller } from "react-hook-form";
-import { makeStyles } from '@material-ui/core/styles';
-import TextField from '@material-ui/core/TextField';
-import Button from '@material-ui/core/Button';
-
+import { makeStyles } from '@mui/styles';
+import { Container,Button,FormGroup,Grid,TextField} from '@mui/material';
 const useStyles = makeStyles((theme) => ({
     root: {
       '& .MuiTextField-root': {
