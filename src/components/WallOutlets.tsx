@@ -3,7 +3,8 @@ import React from 'react';
 import { withStyles } from '@mui/styles';
 
 
-import {FormControlLabel,FormLabel,Grid,Switch} from '@mui/material';
+import {FormControlLabel,Grid,Switch} from '@mui/material';
+import { IOutputs } from './Dashboard';
 
 const styles = () => ({
   myCustomClass: {
@@ -13,19 +14,23 @@ const styles = () => ({
 
 
 
-const WallOutlets = ({ classes,outlets,handleChange,watts,disabled}) => {
-console.log('outs',outlets)
-  return outlets.map((outlet,index) =>   
+const WallOutlets = ({ outputs,handleChange}:IOutputs) => {
+console.log('outs',outputs)
+  return outputs.map((outlet,index) =>   
   
     (
       <Grid item xs={12} sm={4} md={3} key={index}>
-      <FormLabel component="legend">Kulutus:{watts[index]}W</FormLabel>
+
+
+    {/*  <FormLabel component="legend">Kulutus:{watts[index]}W</FormLabel>*/}
+
+
       <FormControlLabel
       
 
       control={ 
           <Switch
-            disabled={disabled}	
+            //disabled={disabled}	
             checked={outlet.status}
             onChange={() =>{ handleChange(index)}}  
             color="primary"

@@ -5,7 +5,7 @@ import { Container,Button,FormGroup,Grid,TextField} from '@mui/material';
 const useStyles = makeStyles((theme) => ({
     root: {
       '& .MuiTextField-root': {
-        margin: theme.spacing(1),
+       
         width: '25ch',
       },
     },
@@ -32,7 +32,7 @@ function Search() {
        <>
     <Container maxWidth="sm">
      <h1>Search for kwhs</h1>
-     <FormGroup className={classes.formGroup} noValidate autoComplete="on">
+     <FormGroup className={classes.formGroup}>
       <form className={classes.root} noValidate autoComplete="off">
       <Grid  item xs={12} sm={12} md={12} >
       <Controller

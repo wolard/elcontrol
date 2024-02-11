@@ -1,6 +1,6 @@
 import React, {useState, useEffect} from 'react';
 import { useHistory } from "react-router-dom";
-import socketIOClient from "socket.io-client";
+import socketIOClient, { Socket } from "socket.io-client";
 import { AppBar,Container,Typography,Button,FormLabel,FormGroup,Grid,Box,Toolbar } from '@mui/material';
 import { makeStyles,withStyles } from '@mui/styles';
 import {Link} from "react-router-dom";
@@ -13,6 +13,7 @@ import {Link} from "react-router-dom";
 //import './App.css';
 import WallOutlets from './WallOutlets'
 import Lights from './Lights'
+import { DefaultEventsMap } from '@socket.io/component-emitter';
 
 
 const StyledFormlabel = withStyles({    //another way modifying css
@@ -42,7 +43,7 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-
+let socket:Socket<DefaultEventsMap, DefaultEventsMap>
 const API_IP=process.env.REACT_APP_API_IP;
 /*
 const socket = socketIOClient(API_IP+':3000');
@@ -51,7 +52,7 @@ socket.on("FromAPI", data => {
   
 });
 */
-let socket;
+
 const initiateSocketConnection =  () => {
   socket = socketIOClient(API_IP+':3000');
   console.log(`Connecting socket...`);
@@ -86,19 +87,43 @@ const subscribeToIoboard = (cb) => {
 }
 */
 
+export interface Irelay{
+  card:number
+  relay:number
+}
+export interface ILight extends Irelay{
+ 
+  type:string
+  status:boolean
+  title?:string
+  }
+  export interface IOutlet extends Irelay{
+ 
+    type:string
+    status:boolean
+    watts?:number
+    title?:string
+    
+     
+  }
+  
+ export interface IOutputs{
+    outputs:ILight[]|IOutlet[]
+    handleChange:(index:number)=>void
+  }
 
 function Dashboard() {
  
 
   const [outlets, setOutlets] = useState([{'card':0,'relay':0,'type':'','status':false}]);
-  const [lights, setLights] = useState([{'card':0,'relay':0,'type':'','status':false}]);
+  const [lights, setLights] = useState<ILight[]>([]);
   const [watts, setWatts] = useState([0,0,0,0,0,0,0,0,0]);
   const [disabled, setDisabled] = useState(false);
   const history = useHistory();
   const classes = useStyles();
 
 
-const handleLogout = e => {
+const handleLogout = (e:any)=> {
  
   e.preventDefault();
   localStorage.removeItem('user');
@@ -106,7 +131,7 @@ const handleLogout = e => {
 }
 
 
-const handleChangeLights = (index) => {
+const handleChangeLights = (index:number) => {
   let token = (localStorage.getItem('user'));
  lights[index].status=!lights[index].status ;
  
@@ -120,9 +145,9 @@ const handleChangeLights = (index) => {
     type:lights[index].type
   }
   console.log(lobj);
-  const requestOptions = {
+  const requestOptions:RequestInit = {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json', 'x-access-token':token  },
+    headers: { 'Content-Type': 'application/json', 'x-access-token':token!  },
     body: JSON.stringify(lobj)
 };
 fetch(API_IP+':3000/light', requestOptions)
@@ -136,7 +161,7 @@ fetch(API_IP+':3000/light', requestOptions)
 
 
 
-const handleChangeOutlets = (index) => {
+const handleChangeOutlets = (index:number) => {
   let token = (localStorage.getItem('user'));
   setDisabled(true)
   /*
@@ -153,10 +178,10 @@ const handleChangeOutlets = (index) => {
     type:outlets[index].type
   }
 console.log(lobj)
-  const requestOptions = {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json', 'x-access-token':token},
-    body: JSON.stringify(lobj)
+const requestOptions:RequestInit = {
+  method: 'POST',
+  headers: { 'Content-Type': 'application/json', 'x-access-token':token!  },
+  body: JSON.stringify(lobj)
 };
 fetch(API_IP+':3000/light', requestOptions)
 
@@ -186,28 +211,28 @@ fetch(API_IP+':3000/light', requestOptions)
     //console.log(user);
     const url = API_IP+':3000/init';
     let token = (localStorage.getItem('user'));
-    const Options = {
+    const Options:RequestInit = {
       method: 'GET',
       headers: { 'Content-Type': 'application/json' ,
-      'x-access-token':token   },
+      'x-access-token':token!   },
      };
     const fetchData = async () => {
       try {
         
         const response = await fetch(url,Options);
         const json = await response.json();
-        json.forEach(e => {
+        json.forEach((e:any) => {
           e.status = Boolean(e.status);
           
         });
    
        
-        const lghts= json.filter( outl=> outl.groupname === "valot");
+        const lghts= json.filter( (outl:any)=> outl.groupname === "valot");
         console.log("lights",lghts);
       
         
       
-       const outl= json.filter( outl=> outl.groupname === "pistorasiat" );
+       const outl= json.filter( (outl:any)=> outl.groupname === "pistorasiat" );
        
        console.log('outlets',outl);
     
@@ -267,9 +292,9 @@ useEffect(() => {
  // if (outlets) initiateSocketConnection();
  socket.on('ioboard', data => {
   const newOutlets = [...outlets];
-  const outlet= newOutlets.filter( outl=> outl.relay === data.num );
+  const outlet= newOutlets.find( outl=> outl.relay === data.num );
   console.log(outlet);
-  outlet.status=Boolean(data.state)
+  outlet!.status=(data.state)
   newOutlets[data.num-1].status= data.state
   setOutlets(newOutlets); 
   console.log(data);
@@ -331,17 +356,17 @@ useEffect(() => {
  </Box>
  
     <FormGroup row>
-      <StyledFormlabel component="legend">Laiturin pistorasiat</StyledFormlabel>
+      <StyledFormlabel >Laiturin pistorasiat</StyledFormlabel>
     <Grid container  spacing={1}>
-        <WallOutlets watts={watts} outlets={outlets} handleChange={handleChangeOutlets} disabled={disabled} />
+        <WallOutlets  outputs={outlets} handleChange={handleChangeOutlets}  />
      </Grid>
      </FormGroup>
   
 
       <FormGroup row>
-      <StyledFormlabel component="legend">Laiturin Valot</StyledFormlabel>
+      <StyledFormlabel>Laiturin Valot</StyledFormlabel>
     <Grid container  spacing={1}>
-       <Lights lights={lights} handleChange={handleChangeLights} />
+       <Lights outputs={lights} handleChange={handleChangeLights} />
      </Grid>
      </FormGroup>
    

@@ -6,7 +6,6 @@ import { AppBar,Container,Typography,Button,FormGroup,Grid,TextField} from '@mui
 const useStyles = makeStyles((theme) => ({
   root: {
     '& .MuiTextField-root': {
-      margin: theme.spacing(1),
       width: '25ch',
     },
   },
@@ -33,7 +32,7 @@ const Landing = () => {
     } = useForm()
     const history = useHistory();
 
-    const handleLogin = async data => {
+    const handleLogin = async (data:any) => {
       console.log(data.TextField);
       let user = {
         user: data.TextField,
@@ -56,7 +55,7 @@ const Landing = () => {
         history.push('/dashboard');
        }
        else
-       setloggedIn('login failed')
+       setloggedIn(false)
 
       } catch (error) {
         console.log("error", error);
@@ -78,7 +77,7 @@ const Landing = () => {
       </AppBar>
    
     
-      <FormGroup className={classes.formGroup} noValidate autoComplete="on">
+      <FormGroup className={classes.formGroup}>
       <form className={classes.root} noValidate autoComplete="off">
       <Grid  item xs={12} sm={12} md={12} >
       <Controller

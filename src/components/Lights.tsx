@@ -2,6 +2,7 @@ import React from 'react';
 
 import { Grid,Switch,FormControlLabel} from '@mui/material';
 import { withStyles} from '@mui/styles';
+import {IOutputs } from './Dashboard';
 
 
 
@@ -14,12 +15,14 @@ const styles = () => ({
 
 
 
-const Lights = ({ classes,lights, handleChange}) => {
+
+
+const Lights = ({ outputs, handleChange}:IOutputs) => {
   
   
   
 
-  return lights.map((light,index) => 
+  return outputs.map((light,index) => 
   (
          
       <Grid  item xs={12} sm={4} md={3} key={index} >
