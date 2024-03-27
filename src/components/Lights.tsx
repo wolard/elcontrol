@@ -1,8 +1,8 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 
 import { Grid,Switch,FormControlLabel} from '@mui/material';
 import { withStyles} from '@mui/styles';
-import {IOutputs } from './Dashboard';
+import { IComponent, ILight } from '../../types';
 
 
 
@@ -17,29 +17,33 @@ const styles = () => ({
 
 
 
-const Lights = ({ outputs, handleChange}:IOutputs) => {
-  
-  
-  
+const Lights = ({items ,handleChange }:IComponent<ILight>) => {
 
-  return outputs.map((light,index) => 
+
+ 
+ 
+
+
+
+
+  return items.map((item) => 
   (
          
-      <Grid  item xs={12} sm={4} md={3} key={index} >
+      <Grid  item xs={12} sm={4} md={3} key={item.relay} >
       
       <FormControlLabel
       
 
   control={ 
       <Switch
-        checked={light.status}
-        onChange={() =>{ handleChange(index)}}  
+        checked={Boolean(item.status)}
+        onChange={() => handleChange(item)}  
         color="primary"
         name="checkedB"
         inputProps={{ 'aria-label': 'primary checkbox' }}
       />
   }
-      label={light.title}
+      label={item.title}
       />
     </Grid>
     

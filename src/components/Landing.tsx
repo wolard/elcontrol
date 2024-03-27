@@ -3,6 +3,7 @@ import { useHistory } from "react-router-dom";
 import { useForm, Controller } from "react-hook-form";
 import { makeStyles } from '@mui/styles';
 import { AppBar,Container,Typography,Button,FormGroup,Grid,TextField} from '@mui/material';
+import { API_IP, socket } from '../socket';
 const useStyles = makeStyles((theme) => ({
   root: {
     '& .MuiTextField-root': {
@@ -18,11 +19,11 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-const API_IP = process.env.REACT_APP_API_IP;
 
 
 
-const Landing = () => {
+
+export const Landing = () => {
   const [loggedIn, setloggedIn] = useState(false);
     const classes = useStyles();
 
@@ -47,10 +48,15 @@ const Landing = () => {
         body: JSON.stringify(user)
       };
       try {
-        const response = await fetch(API_IP + ':3000/login', requestOptions)
+        const response = await fetch(API_IP + '/login', requestOptions)
        if (response.ok){
+        
         const json = await response.json()
         setloggedIn(true);
+        if(!socket.connected)
+        {
+        socket.connect()
+        }
         localStorage.setItem("user", json.token)
         history.push('/dashboard');
        }
@@ -106,4 +112,5 @@ const Landing = () => {
   )
 };
 
-export default Landing;
+export { API_IP };
+
